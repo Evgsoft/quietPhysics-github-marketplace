@@ -41,7 +41,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run QuietPhysics Invariant Gate
-        uses: Evgsoft/quietPhysics-github-marketplase@main
+        uses: Evgsoft/quietPhysics-github-marketplace@main
         with:
           api-key: ${{ secrets.QP_API_KEY }}
           basic-auth-username: ${{ secrets.QP_BASIC_AUTH_USERNAME }}
