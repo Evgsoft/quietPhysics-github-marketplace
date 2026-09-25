@@ -1,0 +1,80 @@
+name: 'QuietPhysics Cloud Security Invariant Gate (SaaS API)'
+description: 'Closed-source deterministic cloud security verification & attack-path regression testing for Terraform and Kubernetes'
+author: 'QuietPhysics'
+
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  api-key:
+    description: 'QuietPhysics Cloud API Key (per-tenant, sent as X-API-Key)'
+    required: true
+    default: ${{ secrets.QP_API_KEY }}
+  basic-auth-username:
+    description: 'QuietPhysics Cloud shared access username. The whole API is gated behind HTTP Basic Auth ahead of the per-tenant key above - issued alongside your API key, not the same credential.'
+    required: true
+    default: ${{ secrets.QP_BASIC_AUTH_USERNAME }}
+  basic-auth-password:
+    description: 'QuietPhysics Cloud shared access password (see basic-auth-username)'
+    required: true
+    default: ${{ secrets.QP_BASIC_AUTH_PASSWORD }}
+  api-url:
+    description: 'QuietPhysics Cloud API Endpoint'
+    required: false
+    default: 'https://api.quietphysics.com/v1/evaluate'
+  scenario:
+    description: 'Scenario number (1-8) or "all" to run full invariant suite'
+    required: false
+    default: 'all'
+  mode:
+    description: 'Evaluation mode: "pr-regression" or "baseline"'
+    required: false
+    default: 'pr-regression'
+  fail-on-regression:
+    description: 'Whether to exit with non-zero status code on detected regression'
+    required: false
+    default: 'true'
+  post-pr-comment:
+    description: 'Whether to post rich attack-path breakdown comment to Pull Request'
+    required: false
+    default: 'true'
+  github-token:
+    description: 'GitHub token used for posting PR comments'
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  verdict:
+    description: 'Final security verdict: "APPROVED" or "BLOCKED"'
+    value: ${{ steps.run-client.outputs.verdict }}
+  violations-count:
+    description: 'Total count of failing security invariant scenarios'
+    value: ${{ steps.run-client.outputs.violations-count }}
+  passed-count:
+    description: 'Total count of passing security invariant scenarios'
+    value: ${{ steps.run-client.outputs.passed-count }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Execute QuietPhysics Cloud Invariant Gate
+      id: run-client
+      shell: bash
+      env:
+        QP_API_KEY: ${{ inputs.api-key }}
+        QP_BASIC_AUTH_USERNAME: ${{ inputs.basic-auth-username }}
+        QP_BASIC_AUTH_PASSWORD: ${{ inputs.basic-auth-password }}
+        QP_API_URL: ${{ inputs.api-url }}
+        INPUT_SCENARIO: ${{ inputs.scenario }}
+        INPUT_MODE: ${{ inputs.mode }}
+        INPUT_FAIL_ON_REGRESSION: ${{ inputs.fail-on-regression }}
+        INPUT_POST_PR_COMMENT: ${{ inputs.post-pr-comment }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+      run: |
+        python3 ${{ github.action_path }}/action/client.py
