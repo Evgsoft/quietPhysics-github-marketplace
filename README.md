@@ -44,19 +44,16 @@ jobs:
         uses: Evgsoft/quietPhysics-github-marketplace@main
         with:
           api-key: ${{ secrets.QP_API_KEY }}
-          basic-auth-username: ${{ secrets.QP_BASIC_AUTH_USERNAME }}
-          basic-auth-password: ${{ secrets.QP_BASIC_AUTH_PASSWORD }}
           scenario: 'all'
           fail-on-regression: 'true'
           post-pr-comment: 'true'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-`api-key` is your own per-tenant key. `basic-auth-username`/
-`basic-auth-password` are a separate, shared credential gating the whole
-QuietPhysics Cloud API on top of that — issued alongside your API key,
-not the same thing. Both are required; the action fails fast with a clear
-message if either is missing.
+`api-key` is your own per-tenant key — that's all you need. (If
+QuietPhysics separately gave you a shared `basic-auth-username`/
+`basic-auth-password` pair for closed-beta access, add those too; most
+customers won't have one and don't need it.)
 
 ---
 
@@ -65,8 +62,8 @@ message if either is missing.
 | Input | Description | Required | Default |
 | :--- | :--- | :---: | :---: |
 | `api-key` | Your QuietPhysics Cloud API key (per-tenant, sent as `X-API-Key`) | **Yes** | `${{ secrets.QP_API_KEY }}` |
-| `basic-auth-username` | Shared QuietPhysics Cloud access username (see above) | **Yes** | `${{ secrets.QP_BASIC_AUTH_USERNAME }}` |
-| `basic-auth-password` | Shared QuietPhysics Cloud access password (see above) | **Yes** | `${{ secrets.QP_BASIC_AUTH_PASSWORD }}` |
+| `basic-auth-username` | Only if QuietPhysics gave you a separate shared closed-beta credential (see above) | No | `${{ secrets.QP_BASIC_AUTH_USERNAME }}` |
+| `basic-auth-password` | See `basic-auth-username` | No | `${{ secrets.QP_BASIC_AUTH_PASSWORD }}` |
 | `api-url` | QuietPhysics Cloud endpoint | No | `https://api.quietphysics.com/v1/evaluate` |
 | `scenario` | Invariant pack to evaluate (`all` or `1`-`8`) | No | `all` |
 | `mode` | Evaluation mode: `pr-regression` or `baseline` | No | `pr-regression` |
@@ -98,6 +95,5 @@ Status: ❌ DEPLOYMENT BLOCKED | Passed: 0/8
   Remove 'payments_assume_production_admin' IAM policy attachment.
 ```
 
-Only appears for the full `scenario: 'all'` run today — single-scenario
-runs (`scenario: '1'`-`'8'`) get a plain terminal-style result instead
-(see `plans/03-github-action-client.md` #5).
+Appears the same way for both a full `scenario: 'all'` run and a
+single-scenario run (`scenario: '1'`-`'8'`).

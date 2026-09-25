@@ -55,19 +55,17 @@ def main():
         print("❌ QP_API_KEY is not set. Add your QuietPhysics API key as a repository secret named QP_API_KEY.")
         sys.exit(1)
 
-    # The deployed API gates every route behind HTTP Basic Auth ahead of the
-    # per-tenant key above (src/quietphysics/saas/api.py's require_basic_auth
-    # middleware) - a separate shared credential issued alongside the API
-    # key, not a substitute for it. Both must be present or every call 401s
-    # before it ever reaches /v1/evaluate.
+    # /v1/evaluate accepts the per-tenant key above on its own - a shared
+    # Basic Auth pair used to be required on every route, including this
+    # one, but the real signup flow never actually issued that credential
+    # to a customer anywhere, so requiring it here left every real
+    # customer stuck with a working API key and no way to proceed (see
+    # plans/06-github-marketplace-publishing.md Milestone 0). Sent only
+    # if both are provided - optional, not required. Still required on
+    # every other route (onboarding, deactivation, /docs), which this
+    # client doesn't call.
     basic_auth_username = os.getenv("QP_BASIC_AUTH_USERNAME", "").strip()
     basic_auth_password = os.getenv("QP_BASIC_AUTH_PASSWORD", "").strip()
-    if not basic_auth_username or not basic_auth_password:
-        print("❌ QP_BASIC_AUTH_USERNAME/QP_BASIC_AUTH_PASSWORD are not set. Add both as repository secrets.")
-        sys.exit(1)
-    basic_auth_token = base64.b64encode(
-        f"{basic_auth_username}:{basic_auth_password}".encode("utf-8")
-    ).decode("ascii")
 
     scenario = os.getenv("INPUT_SCENARIO", "all")
     mode = os.getenv("INPUT_MODE", "pr-regression")
@@ -82,16 +80,22 @@ def main():
         "commit_sha": os.getenv("GITHUB_SHA", "HEAD"),
     }
 
+    headers = {
+        "X-API-Key": api_key,
+        "Content-Type": "application/json",
+        "User-Agent": "QuietPhysics-GitHub-Action/1.0"
+    }
+    if basic_auth_username and basic_auth_password:
+        basic_auth_token = base64.b64encode(
+            f"{basic_auth_username}:{basic_auth_password}".encode("utf-8")
+        ).decode("ascii")
+        headers["Authorization"] = f"Basic {basic_auth_token}"
+
     req_data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
         api_url,
         data=req_data,
-        headers={
-            "Authorization": f"Basic {basic_auth_token}",
-            "X-API-Key": api_key,
-            "Content-Type": "application/json",
-            "User-Agent": "QuietPhysics-GitHub-Action/1.0"
-        },
+        headers=headers,
         method="POST"
     )
 

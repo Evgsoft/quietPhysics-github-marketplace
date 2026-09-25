@@ -12,12 +12,12 @@ inputs:
     required: true
     default: ${{ secrets.QP_API_KEY }}
   basic-auth-username:
-    description: 'QuietPhysics Cloud shared access username. The whole API is gated behind HTTP Basic Auth ahead of the per-tenant key above - issued alongside your API key, not the same credential.'
-    required: true
+    description: 'Optional. Only needed if QuietPhysics gave you a separate shared access username for closed-beta access - most customers do not need this; api-key alone is enough.'
+    required: false
     default: ${{ secrets.QP_BASIC_AUTH_USERNAME }}
   basic-auth-password:
-    description: 'QuietPhysics Cloud shared access password (see basic-auth-username)'
-    required: true
+    description: 'Optional. See basic-auth-username - only needed if QuietPhysics gave you one.'
+    required: false
     default: ${{ secrets.QP_BASIC_AUTH_PASSWORD }}
   api-url:
     description: 'QuietPhysics Cloud API Endpoint'
