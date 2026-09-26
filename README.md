@@ -97,3 +97,6 @@ Status: ❌ DEPLOYMENT BLOCKED | Passed: 0/8
 
 Appears the same way for both a full `scenario: 'all'` run and a
 single-scenario run (`scenario: '1'`-`'8'`).
+
+Re-running on the same PR (e.g. after pushing another commit) updates
+this same comment in place rather than posting a new one each time.
