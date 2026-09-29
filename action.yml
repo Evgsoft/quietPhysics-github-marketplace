@@ -8,10 +8,10 @@ branding:
 
 inputs:
   api-key:
-    description: 'QuietPhysics Cloud API Key (per-tenant, sent as X-API-Key). Required - pass it explicitly as with: api-key: ${{ secrets.QP_API_KEY }} in your workflow; a reusable action''s own action.yml cannot read your secrets context itself.'
+    description: 'QuietPhysics Cloud API Key (per-tenant, sent as X-API-Key). Required - your workflow must pass it explicitly via the with: block, from your own repository secret; a reusable action cannot read your secrets context on its own.'
     required: true
   basic-auth-username:
-    description: 'Optional. Only needed if QuietPhysics gave you a separate shared access username for closed-beta access - most customers do not need this; api-key alone is enough. Pass as with: basic-auth-username: ${{ secrets.QP_BASIC_AUTH_USERNAME }}.'
+    description: 'Optional. Only needed if QuietPhysics gave you a separate shared access username for closed-beta access - most customers do not need this; api-key alone is enough. Pass via the with: block, same as api-key above.'
     required: false
   basic-auth-password:
     description: 'Optional. See basic-auth-username - only needed if QuietPhysics gave you one.'
