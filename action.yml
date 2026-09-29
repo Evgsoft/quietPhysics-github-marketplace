@@ -17,9 +17,9 @@ inputs:
     description: 'Optional. See basic-auth-username - only needed if QuietPhysics gave you one.'
     required: false
   api-url:
-    description: 'QuietPhysics Cloud API Endpoint'
+    description: 'QuietPhysics Cloud API Endpoint. Defaults to the real deployed qp-service - override only if you were given a different URL. (Stopgap: this is the raw App Runner URL, not a custom domain - no custom domain exists yet, see plans/02-production-saas-core.md #5. Update this default if/when one is set up.)'
     required: false
-    default: 'https://api.quietphysics.com/v1/evaluate'
+    default: 'https://tastjd22ug.us-east-1.awsapprunner.com/v1/evaluate'
   scenario:
     description: 'Scenario number (1-8) or "all" to run full invariant suite'
     required: false

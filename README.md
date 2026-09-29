@@ -61,10 +61,10 @@ customers won't have one and don't need it.)
 
 | Input | Description | Required | Default |
 | :--- | :--- | :---: | :---: |
-| `api-key` | Your QuietPhysics Cloud API key (per-tenant, sent as `X-API-Key`) | **Yes** | `${{ secrets.QP_API_KEY }}` |
-| `basic-auth-username` | Only if QuietPhysics gave you a separate shared closed-beta credential (see above) | No | `${{ secrets.QP_BASIC_AUTH_USERNAME }}` |
-| `basic-auth-password` | See `basic-auth-username` | No | `${{ secrets.QP_BASIC_AUTH_PASSWORD }}` |
-| `api-url` | QuietPhysics Cloud endpoint | No | `https://api.quietphysics.com/v1/evaluate` |
+| `api-key` | Your QuietPhysics Cloud API key (per-tenant, sent as `X-API-Key`) | **Yes** | none - pass via `with:` from your own repo secret |
+| `basic-auth-username` | Only if QuietPhysics gave you a separate shared closed-beta credential (see above) | No | none - pass via `with:`, same as `api-key` |
+| `basic-auth-password` | See `basic-auth-username` | No | none |
+| `api-url` | QuietPhysics Cloud endpoint | No | `https://tastjd22ug.us-east-1.awsapprunner.com/v1/evaluate` (no custom domain yet) |
 | `scenario` | Invariant pack to evaluate (`all` or `1`-`8`) | No | `all` |
 | `mode` | Evaluation mode: `pr-regression` or `baseline` | No | `pr-regression` |
 | `fail-on-regression` | Exit non-zero on a detected regression | No | `true` |
