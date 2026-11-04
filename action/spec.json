@@ -1,0 +1,731 @@
+{
+  "kubernetes": {
+    "ClusterRole": {
+      "kind": true,
+      "metadata": {
+        "name": true,
+        "namespace": true
+      },
+      "rules": {
+        "resources": true,
+        "verbs": true
+      }
+    },
+    "ClusterRoleBinding": {
+      "kind": true,
+      "metadata": {
+        "name": true,
+        "namespace": true
+      },
+      "roleRef": {
+        "kind": true,
+        "name": true
+      },
+      "subjects": {
+        "kind": true,
+        "name": true,
+        "namespace": true
+      }
+    },
+    "CronJob": {
+      "kind": true,
+      "metadata": {
+        "name": true,
+        "namespace": true
+      },
+      "spec": {
+        "jobTemplate": {
+          "spec": {
+            "template": {
+              "spec": {
+                "containers": {
+                  "name": true,
+                  "securityContext": {
+                    "allowPrivilegeEscalation": true,
+                    "capabilities": {
+                      "add": true
+                    },
+                    "privileged": true,
+                    "readOnlyRootFilesystem": true
+                  }
+                },
+                "ephemeralContainers": {
+                  "name": true,
+                  "securityContext": {
+                    "allowPrivilegeEscalation": true,
+                    "capabilities": {
+                      "add": true
+                    },
+                    "privileged": true,
+                    "readOnlyRootFilesystem": true
+                  }
+                },
+                "hostIPC": true,
+                "hostNetwork": true,
+                "hostPID": true,
+                "initContainers": {
+                  "name": true,
+                  "securityContext": {
+                    "allowPrivilegeEscalation": true,
+                    "capabilities": {
+                      "add": true
+                    },
+                    "privileged": true,
+                    "readOnlyRootFilesystem": true
+                  }
+                },
+                "volumes": {
+                  "hostPath": {
+                    "path": true
+                  },
+                  "name": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "DaemonSet": {
+      "kind": true,
+      "metadata": {
+        "name": true,
+        "namespace": true
+      },
+      "spec": {
+        "template": {
+          "spec": {
+            "containers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "ephemeralContainers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "hostIPC": true,
+            "hostNetwork": true,
+            "hostPID": true,
+            "initContainers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "volumes": {
+              "hostPath": {
+                "path": true
+              },
+              "name": true
+            }
+          }
+        }
+      }
+    },
+    "Deployment": {
+      "kind": true,
+      "metadata": {
+        "name": true,
+        "namespace": true
+      },
+      "spec": {
+        "template": {
+          "spec": {
+            "containers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "ephemeralContainers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "hostIPC": true,
+            "hostNetwork": true,
+            "hostPID": true,
+            "initContainers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "volumes": {
+              "hostPath": {
+                "path": true
+              },
+              "name": true
+            }
+          }
+        }
+      }
+    },
+    "Job": {
+      "kind": true,
+      "metadata": {
+        "name": true,
+        "namespace": true
+      },
+      "spec": {
+        "template": {
+          "spec": {
+            "containers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "ephemeralContainers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "hostIPC": true,
+            "hostNetwork": true,
+            "hostPID": true,
+            "initContainers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "volumes": {
+              "hostPath": {
+                "path": true
+              },
+              "name": true
+            }
+          }
+        }
+      }
+    },
+    "Pod": {
+      "kind": true,
+      "metadata": {
+        "name": true,
+        "namespace": true
+      },
+      "spec": {
+        "containers": {
+          "name": true,
+          "securityContext": {
+            "allowPrivilegeEscalation": true,
+            "capabilities": {
+              "add": true
+            },
+            "privileged": true,
+            "readOnlyRootFilesystem": true
+          }
+        },
+        "ephemeralContainers": {
+          "name": true,
+          "securityContext": {
+            "allowPrivilegeEscalation": true,
+            "capabilities": {
+              "add": true
+            },
+            "privileged": true,
+            "readOnlyRootFilesystem": true
+          }
+        },
+        "hostIPC": true,
+        "hostNetwork": true,
+        "hostPID": true,
+        "initContainers": {
+          "name": true,
+          "securityContext": {
+            "allowPrivilegeEscalation": true,
+            "capabilities": {
+              "add": true
+            },
+            "privileged": true,
+            "readOnlyRootFilesystem": true
+          }
+        },
+        "volumes": {
+          "hostPath": {
+            "path": true
+          },
+          "name": true
+        }
+      }
+    },
+    "ReplicaSet": {
+      "kind": true,
+      "metadata": {
+        "name": true,
+        "namespace": true
+      },
+      "spec": {
+        "template": {
+          "spec": {
+            "containers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "ephemeralContainers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "hostIPC": true,
+            "hostNetwork": true,
+            "hostPID": true,
+            "initContainers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "volumes": {
+              "hostPath": {
+                "path": true
+              },
+              "name": true
+            }
+          }
+        }
+      }
+    },
+    "ReplicationController": {
+      "kind": true,
+      "metadata": {
+        "name": true,
+        "namespace": true
+      },
+      "spec": {
+        "template": {
+          "spec": {
+            "containers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "ephemeralContainers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "hostIPC": true,
+            "hostNetwork": true,
+            "hostPID": true,
+            "initContainers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "volumes": {
+              "hostPath": {
+                "path": true
+              },
+              "name": true
+            }
+          }
+        }
+      }
+    },
+    "Role": {
+      "kind": true,
+      "metadata": {
+        "name": true,
+        "namespace": true
+      },
+      "rules": {
+        "resources": true,
+        "verbs": true
+      }
+    },
+    "RoleBinding": {
+      "kind": true,
+      "metadata": {
+        "name": true,
+        "namespace": true
+      },
+      "roleRef": {
+        "kind": true,
+        "name": true
+      },
+      "subjects": {
+        "kind": true,
+        "name": true,
+        "namespace": true
+      }
+    },
+    "StatefulSet": {
+      "kind": true,
+      "metadata": {
+        "name": true,
+        "namespace": true
+      },
+      "spec": {
+        "template": {
+          "spec": {
+            "containers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "ephemeralContainers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "hostIPC": true,
+            "hostNetwork": true,
+            "hostPID": true,
+            "initContainers": {
+              "name": true,
+              "securityContext": {
+                "allowPrivilegeEscalation": true,
+                "capabilities": {
+                  "add": true
+                },
+                "privileged": true,
+                "readOnlyRootFilesystem": true
+              }
+            },
+            "volumes": {
+              "hostPath": {
+                "path": true
+              },
+              "name": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "rules_version": "qp-rules-1.4eef91c0",
+  "terraform": {
+    "aws_db_instance": [
+      "encrypted",
+      "policy",
+      "publicly_accessible",
+      "storage_encrypted"
+    ],
+    "aws_iam_group_policy": [
+      "group",
+      "inline_policy",
+      "kms_key_id",
+      "managed_policy_arns",
+      "name",
+      "policy",
+      "policy_arn",
+      "role",
+      "tags",
+      "user"
+    ],
+    "aws_iam_group_policy_attachment": [
+      "group",
+      "inline_policy",
+      "managed_policy_arns",
+      "policy",
+      "policy_arn",
+      "role",
+      "user"
+    ],
+    "aws_iam_policy": [
+      "group",
+      "inline_policy",
+      "kms_key_id",
+      "managed_policy_arns",
+      "name",
+      "policy",
+      "policy_arn",
+      "role",
+      "tags",
+      "user"
+    ],
+    "aws_iam_policy_attachment": [
+      "group",
+      "inline_policy",
+      "managed_policy_arns",
+      "policy",
+      "policy_arn",
+      "role",
+      "user"
+    ],
+    "aws_iam_role": [
+      "assume_role_policy",
+      "group",
+      "inline_policy",
+      "managed_policy_arns",
+      "name",
+      "policy",
+      "policy_arn",
+      "role",
+      "tags",
+      "user"
+    ],
+    "aws_iam_role_policy": [
+      "group",
+      "inline_policy",
+      "kms_key_id",
+      "managed_policy_arns",
+      "name",
+      "policy",
+      "policy_arn",
+      "role",
+      "tags",
+      "user"
+    ],
+    "aws_iam_role_policy_attachment": [
+      "group",
+      "inline_policy",
+      "managed_policy_arns",
+      "name",
+      "policy",
+      "policy_arn",
+      "role",
+      "tags",
+      "user"
+    ],
+    "aws_iam_user_policy": [
+      "group",
+      "inline_policy",
+      "kms_key_id",
+      "managed_policy_arns",
+      "name",
+      "policy",
+      "policy_arn",
+      "role",
+      "tags",
+      "user"
+    ],
+    "aws_iam_user_policy_attachment": [
+      "group",
+      "inline_policy",
+      "managed_policy_arns",
+      "policy",
+      "policy_arn",
+      "role",
+      "user"
+    ],
+    "aws_kms_key": [
+      "kms_key_id",
+      "policy"
+    ],
+    "aws_kms_key_policy": [
+      "kms_key_id",
+      "policy"
+    ],
+    "aws_rds_cluster": [
+      "encrypted",
+      "policy",
+      "publicly_accessible",
+      "storage_encrypted"
+    ],
+    "aws_redshift_cluster": [
+      "encrypted",
+      "policy",
+      "publicly_accessible",
+      "storage_encrypted"
+    ],
+    "aws_s3_bucket": [
+      "acl",
+      "block_public_acls",
+      "block_public_policy",
+      "bucket",
+      "ignore_public_acls",
+      "restrict_public_buckets"
+    ],
+    "aws_s3_bucket_acl": [
+      "acl",
+      "block_public_acls",
+      "block_public_policy",
+      "bucket",
+      "ignore_public_acls",
+      "restrict_public_buckets"
+    ],
+    "aws_s3_bucket_policy": [
+      "encrypted",
+      "policy",
+      "publicly_accessible",
+      "storage_encrypted"
+    ],
+    "aws_s3_bucket_public_access_block": [
+      "acl",
+      "block_public_acls",
+      "block_public_policy",
+      "bucket",
+      "ignore_public_acls",
+      "restrict_public_buckets"
+    ],
+    "aws_secretsmanager_secret": [
+      "kms_key_id",
+      "policy"
+    ],
+    "aws_secretsmanager_secret_policy": [
+      "kms_key_id",
+      "policy"
+    ],
+    "aws_security_group": [
+      "cidr_blocks",
+      "cidr_ipv4",
+      "cidr_ipv6",
+      "from_port",
+      "ingress",
+      "ip_protocol",
+      "ipv6_cidr_blocks",
+      "protocol",
+      "to_port",
+      "type"
+    ],
+    "aws_security_group_rule": [
+      "cidr_blocks",
+      "cidr_ipv4",
+      "cidr_ipv6",
+      "from_port",
+      "ingress",
+      "ip_protocol",
+      "ipv6_cidr_blocks",
+      "protocol",
+      "to_port",
+      "type"
+    ],
+    "aws_vpc_security_group_ingress_rule": [
+      "cidr_blocks",
+      "cidr_ipv4",
+      "cidr_ipv6",
+      "from_port",
+      "ingress",
+      "ip_protocol",
+      "ipv6_cidr_blocks",
+      "protocol",
+      "to_port",
+      "type"
+    ]
+  },
+  "terraform_nested": {
+    "aws_iam_group_policy": {
+      "tags": [
+        "qp:role"
+      ]
+    },
+    "aws_iam_policy": {
+      "tags": [
+        "qp:role"
+      ]
+    },
+    "aws_iam_role": {
+      "tags": [
+        "qp:role"
+      ]
+    },
+    "aws_iam_role_policy": {
+      "tags": [
+        "qp:role"
+      ]
+    },
+    "aws_iam_role_policy_attachment": {
+      "tags": [
+        "qp:role"
+      ]
+    },
+    "aws_iam_user_policy": {
+      "tags": [
+        "qp:role"
+      ]
+    }
+  }
+}
