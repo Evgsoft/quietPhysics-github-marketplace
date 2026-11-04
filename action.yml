@@ -8,8 +8,20 @@ branding:
 
 inputs:
   api-key:
-    description: 'QuietPhysics Cloud API Key (per-tenant, sent as X-API-Key). Required - your workflow must pass it explicitly via the with: block, from your own repository secret; a reusable action cannot read your secrets context on its own.'
-    required: true
+    description: 'QuietPhysics Cloud API Key (per-tenant, sent as X-API-Key). Required with auth: api-key (the default) - your workflow must pass it explicitly via the with: block, from your own repository secret; a reusable action cannot read your secrets context on its own. Not needed with auth: oidc.'
+    required: false
+  auth:
+    description: 'How the Action authenticates: "api-key" (default; sends api-key as X-API-Key), "oidc" (keyless: a GitHub OIDC token is requested and sent as a Bearer token; needs `permissions: id-token: write`; api-key is ignored and never sent), or "auto" (OIDC when the runner offers a token, else the api-key if one is given, else the on-no-token rule; there is no fallback to the key after a failed token request). Basic-auth inputs cannot be combined with OIDC.'
+    required: false
+    default: 'api-key'
+  oidc-audience:
+    description: 'Audience of the OIDC token. Empty = the lowercase host of api-url (no scheme, no port). It must equal the QP_OIDC_AUDIENCE configured on the QuietPhysics server.'
+    required: false
+    default: ''
+  on-no-token:
+    description: 'What to do when auth is oidc (or auto without an api-key) and the runner gives no OIDC token (pull requests from forks, or a job without `permissions: id-token: write`): "fail" (default) fails the step with verdict UNAVAILABLE; "skip" passes with a warning and verdict SKIPPED. Skipping is NOT an approval and NOT a gate.'
+    required: false
+    default: 'fail'
   basic-auth-username:
     description: 'Optional. Only needed if QuietPhysics gave you a separate shared access username for closed-beta access - most customers do not need this; api-key alone is enough. Pass via the with: block, same as api-key above.'
     required: false
@@ -29,21 +41,68 @@ inputs:
     required: false
     default: 'pr-regression'
   fail-on-regression:
-    description: 'Whether to exit with non-zero status code on detected regression'
+    description: 'Whether to exit with non-zero status code on detected regression. Must be exactly "true" or "false" (any other value fails the step); "false" is report-only.'
     required: false
     default: 'true'
   post-pr-comment:
-    description: 'Whether to post rich attack-path breakdown comment to Pull Request'
+    description: 'Whether to post rich attack-path breakdown comment to Pull Request. Must be exactly "true" or "false" (any other value fails the step).'
     required: false
     default: 'true'
   github-token:
     description: 'GitHub token used for posting PR comments'
     required: false
     default: ${{ github.token }}
+  on-service-error:
+    description: >-
+      What to do when the QuietPhysics API cannot give an answer even after retries
+      (HTTP 5xx, HTTP 429, timeouts, connection failures; retried with backoff and
+      Retry-After, at most about two minutes in total). "fail" (default) fails the
+      job, so an outage blocks the merge. "warn" lets the job pass with a warning
+      annotation and the output verdict UNAVAILABLE: it is NOT an approval and no
+      check ran. A bad or revoked key (401/403), any other 4xx, and a BLOCKED
+      verdict always fail, whatever this is set to.
+    required: false
+    default: 'fail'
+  plan-file:
+    description: 'Path to the output of `terraform show -json <planfile>`. When set (or manifest-files), the Action analyses your own plan instead of a built-in scenario. Only the attributes the rules read are uploaded; everything else is removed on your runner first. If an attribute the rules read holds something that looks like a credential, the step fails before anything is sent (nothing is rewritten). Empty = no Terraform plan.'
+    required: false
+    default: ''
+  manifest-files:
+    description: 'Kubernetes manifest files (YAML or JSON): paths or globs relative to the repository root, one pattern per line (a comma also separates patterns unless a pattern contains braces, which are not supported). Only the fields the rules read are uploaded. Unsupported YAML syntax is refused, never guessed.'
+    required: false
+    default: ''
+  terraform-dir:
+    description: 'Root module directory (relative to the repository root), used to report the file and line of each finding.'
+    required: false
+    default: '.'
+  aws-account-ids:
+    description: 'Comma-separated 12-digit AWS account ids that are your own (used by the cross-account IAM rule). Account ids found in the plan are added automatically. Anything that is not a 12-digit id is an error.'
+    required: false
+    default: ''
+  on-inconclusive:
+    description: 'What to do when the verdict is INCONCLUSIVE (a value a rule needs was unknown or withheld): "warn" (default) passes with a warning annotation, "fail" fails the job. Applies only when fail-on-regression is true.'
+    required: false
+    default: 'warn'
+  on-sensitive:
+    description: 'What to do when a value the rules read is marked sensitive in the Terraform plan (a gate cannot approve a value it cannot see): "fail" (default) stops the step before anything is sent and names the attributes; "send" uploads those values (a credential-shaped value still stops the step). Applies only when plan-file is set.'
+    required: false
+    default: 'fail'
+  block-on:
+    description: 'Severity threshold that blocks: "any" (default; every FAIL blocks, as before), "high" (a MEDIUM or LOW FAIL is shown as a warning and does not block) or "critical". Case-insensitive. Applied by the QuietPhysics server, so the comment, counts and verdict agree. INCONCLUSIVE is never demoted. "advisory: true" is the way to never block.'
+    required: false
+    default: 'any'
+  advisory:
+    description: 'Advisory mode. Must be exactly "true" or "false" (empty = false). With "true" the verdict and comment are unchanged (a BLOCKED verdict is still reported as BLOCKED and the output enforced is "false") but the job does not fail because of the verdict. A service outage with on-service-error: fail, a rejected key, an invalid input and a missing api-key still fail the step.'
+    required: false
+    default: 'false'
+  waivers-file:
+    description: 'Path of a waiver file (for example .quietphysics.yml) in the repository. Empty (default) = no waivers and no extra network call. The file is read from the repository default branch only, through the GitHub API with the github-token (contents: read), never from the pull request itself, so a waiver added in a pull request applies only after it is merged. Only for pull requests that target the default branch.'
+    required: false
+    default: ''
 
 outputs:
   verdict:
-    description: 'Final security verdict: "APPROVED" or "BLOCKED"'
+    description: 'Final security verdict: "APPROVED", "BLOCKED", "INCONCLUSIVE" (a needed value was unknown; not an approval), "SKIPPED" (the plan and manifests held nothing QuietPhysics checks; nothing was sent or analysed; not an approval), or "UNAVAILABLE" (the API or the OIDC token could not be obtained; with on-service-error: warn or a failed step; no check ran)'
     value: ${{ steps.run-client.outputs.verdict }}
   violations-count:
     description: 'Total count of failing security invariant scenarios'
@@ -51,6 +110,9 @@ outputs:
   passed-count:
     description: 'Total count of passing security invariant scenarios'
     value: ${{ steps.run-client.outputs.passed-count }}
+  enforced:
+    description: '"true" when the verdict could fail this job (fail-on-regression is true and advisory is false), "false" otherwise; empty when no verdict was produced.'
+    value: ${{ steps.run-client.outputs.enforced }}
 
 runs:
   using: 'composite'
@@ -65,6 +127,11 @@ runs:
       shell: bash
       env:
         QP_API_KEY: ${{ inputs.api-key }}
+        INPUT_AUTH: ${{ inputs.auth }}
+        INPUT_OIDC_AUDIENCE: ${{ inputs.oidc-audience }}
+        INPUT_ON_NO_TOKEN: ${{ inputs.on-no-token }}
+        # ACTIONS_ID_TOKEN_REQUEST_URL / _TOKEN are deliberately not mapped here: the runner injects them into the process environment, but they are
+        # not in the `env` context, so mapping them would overwrite the real values with empty strings.
         QP_BASIC_AUTH_USERNAME: ${{ inputs.basic-auth-username }}
         QP_BASIC_AUTH_PASSWORD: ${{ inputs.basic-auth-password }}
         QP_API_URL: ${{ inputs.api-url }}
@@ -72,6 +139,16 @@ runs:
         INPUT_MODE: ${{ inputs.mode }}
         INPUT_FAIL_ON_REGRESSION: ${{ inputs.fail-on-regression }}
         INPUT_POST_PR_COMMENT: ${{ inputs.post-pr-comment }}
+        INPUT_ON_SERVICE_ERROR: ${{ inputs.on-service-error }}
+        INPUT_PLAN_FILE: ${{ inputs.plan-file }}
+        INPUT_MANIFEST_FILES: ${{ inputs.manifest-files }}
+        INPUT_TERRAFORM_DIR: ${{ inputs.terraform-dir }}
+        INPUT_AWS_ACCOUNT_IDS: ${{ inputs.aws-account-ids }}
+        INPUT_ON_INCONCLUSIVE: ${{ inputs.on-inconclusive }}
+        INPUT_ON_SENSITIVE: ${{ inputs.on-sensitive }}
+        INPUT_BLOCK_ON: ${{ inputs.block-on }}
+        INPUT_ADVISORY: ${{ inputs.advisory }}
+        INPUT_WAIVERS_FILE: ${{ inputs.waivers-file }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
       run: |
         python3 ${{ github.action_path }}/action/client.py
